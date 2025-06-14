@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { InternalServerErrorException } from '@nestjs/common';
 import { UserSeed } from './sedders/users/user.seed';
+import { ClientSeed } from './sedders/clients/client.seed';
 
 
 async function bootstrap() {
@@ -17,6 +18,9 @@ async function bootstrap() {
   const user_seed = app.get(UserSeed);
   user_seed.seedUsers();
   console.log("preloaded users");
+  const client_seed = app.get(ClientSeed);
+  client_seed.seedClients();
+  console.log("preloaded clients");
 }
 
 bootstrap();

@@ -31,3 +31,40 @@ export const userData = [
         rol: 'user', // Assuming the role is set to 'user' for this user
     },
 ];
+
+export const clientsData = [
+    {
+        nombre: 'Client',
+        apellido: 'One',
+        email: 'client.one@example.com',
+        cel: '987654321',
+        dni: '87654321',
+        cuit: '20-12345678-9',
+        codigo_holistor: 123456,
+        fecha_nacimiento: new Date('1990-01-01'),
+        active: true,
+    },
+    {
+        nombre: 'Client',
+        apellido: 'Two',
+        email: 'client.two@example.com',
+        cel: '987654322',
+        dni: '87654322',
+        cuit: '20-12345679-9',
+        codigo_holistor: 123457,
+        fecha_nacimiento: new Date('1992-02-02'),
+        active: true,
+    },
+    {
+        nombre: 'Client',
+        apellido: 'Three',
+        email: 'client.three@example.com',
+        password: 'clientthree123',
+        cel: '987654323',
+        dni: '87654323',
+        cuit: '20-12345680-9',
+        codigo_holistor: 123458,
+        fecha_nacimiento: new Date('1994-03-03'),   
+        active: true,
+    },
+]

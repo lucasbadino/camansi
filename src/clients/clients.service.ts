@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { Repository } from 'typeorm';
+import { Client } from './entities/client.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ClientsService {
-  create(createClientDto: CreateClientDto) {
-    return 'This action adds a new client';
+  constructor(
+    @InjectRepository(Client)
+    private readonly clientsRepository: Repository<Client>, // Assuming you have a repository for database operations
+  ) { }
+  async create(createClientDto: CreateClientDto) {
+    const client = await this.clientsRepository.create(createClientDto);
+    if (!client) {
+      throw new BadRequestException('Error creating client');
+    }
+    await this.clientsRepository.save(client);
+    return client;
   }
 
-  findAll() {
-    return `This action returns all clients`;
+  async findAll() {
+    const clients = await this.clientsRepository.find();
+    if (clients.length === 0) {
+      throw new BadRequestException('No clients found');
+    }
+    return clients;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
+  async findOne(id: string) {
+    const client = await this.clientsRepository.findOneBy({ id });
+    if (!client) {
+      throw new BadRequestException('Client not found');
+    }
+    return client;
   }
 
-  update(id: number, updateClientDto: UpdateClientDto) {
-    return `This action updates a #${id} client`;
+  async update(id: string, updateClientDto: UpdateClientDto) {
+    await this.clientsRepository.update(id, updateClientDto);
+    return this.clientsRepository.findOneBy({ id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async remove(id: string) {
+    await this.clientsRepository.delete(id);
+    return { message: 'Client deleted successfully' };
   }
 }

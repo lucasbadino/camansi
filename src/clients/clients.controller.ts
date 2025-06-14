@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { Response } from 'express';
 
 @Controller('clients')
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
   @Post()
-  create(@Body() createClientDto: CreateClientDto) {
-    return this.clientsService.create(createClientDto);
+  async create(@Body() createClientDto: CreateClientDto, @Res() res: Response) {
+    try {
+      const client = await this.clientsService.create(createClientDto);
+      return res.status(201).json(client);
+    } catch (error) {
+      return res.status(500).json({ message: error.message || 'Internal Server Error' });
+    }
   }
 
   @Get()
-  findAll() {
-    return this.clientsService.findAll();
+  async findAll(@Res() res: Response) {
+    try {
+      const clients = await this.clientsService.findAll();
+      return res.status(200).json(clients);
+    } catch (error) {
+      return res.status(500).json({ message: error.message || 'Internal Server Error' });
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.clientsService.findOne(+id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
+    try {
+      const client = await this.clientsService.findOne(id);
+      return res.status(200).json(client);
+    } catch (error) {
+      return res.status(500).json({ message: error.message || 'Internal Server Error' });
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClientDto: UpdateClientDto) {
-    return this.clientsService.update(+id, updateClientDto);
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateClientDto: UpdateClientDto, @Res() res: Response) {
+    try {
+      const client = await this.clientsService.update(id, updateClientDto);
+      return res.status(200).json(client);
+    } catch (error) {
+      return res.status(500).json({ message: error.message || 'Internal Server Error' });
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.clientsService.remove(+id);
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
+    try {
+      const client = await this.clientsService.remove(id);
+      return res.status(200).json({ message: client.message || 'Client deleted successfully' });
+    } catch (error) {
+      return res.status(500).json({ message: error.message || 'Internal Server Error' });
+    }
   }
 }

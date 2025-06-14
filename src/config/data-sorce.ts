@@ -14,7 +14,7 @@ const config: DataSourceOptions = {
   migrations: ['dist/migrations/*.js'],
   synchronize: true, // Cambia a 'true' solo en desarrollo, en producción usa migraciones
   logging: false, // Cambia a 'true' para depuración
-  dropSchema: false, // Cambia a 'true' si necesitas eliminar el esquema al reiniciar
+  dropSchema: true, // Cambia a 'true' si necesitas eliminar el esquema al reiniciar
 };
 
 export default registerAs('typeorm', () => config);
