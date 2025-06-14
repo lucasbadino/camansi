@@ -1,6 +1,9 @@
-import { DataSource } from 'typeorm';
+import { registerAs } from '@nestjs/config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
 
-export const AppDataSource = new DataSource({
+const config: DataSourceOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT) || 5432,
@@ -12,4 +15,7 @@ export const AppDataSource = new DataSource({
   synchronize: true, // Cambia a 'true' solo en desarrollo, en producción usa migraciones
   logging: false, // Cambia a 'true' para depuración
   dropSchema: false, // Cambia a 'true' si necesitas eliminar el esquema al reiniciar
-});
+};
+
+export default registerAs('typeorm', () => config);
+export const connectionSource = new DataSource(config as DataSourceOptions);
