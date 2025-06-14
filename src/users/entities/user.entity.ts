@@ -20,5 +20,9 @@ export class User {
     dni: string;
     @Column()
     cuit: string;
-    
+    @Column()
+    rol: string; // 'admin' | 'user'
+    @Column()
+    active: boolean = true;
+
 }

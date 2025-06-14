@@ -18,6 +18,16 @@ export class Client {
     cuit: string;
     @Column()
     codigo_holistor: number;
+    @Column({ nullable: true })
+    fecha_nacimiento: Date;
+    @Column({ nullable: true })
+    direccion: string;
+    @Column({ nullable: true })
+    localidad: string;
+    @Column({ nullable: true })
+    provincia: string;
+    @Column({ nullable: true })
+    codigo_postal: string;
     @Column()
     active: boolean = true;
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

@@ -4,6 +4,7 @@ import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
 import typeOrmConfig from './config/data-sorce';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SeedModule } from './sedders/seed.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     UsersModule,
     ClientsModule,
+    SeedModule
   ],
   controllers: [],
   providers: [],

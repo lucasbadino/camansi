@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -9,26 +9,62 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
-  async create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  ) { }
 
   async findAll() {
-    return await this.userRepository.find();
+    const users = await this.userRepository.find();
+    if (!users || users.length === 0) {
+      throw new NotFoundException('No users found');
+    }
+    return users.map(({ id, nombre, apellido, cel, dni, email }) => ({ id, nombre, apellido, cel, dni, email }));
   }
 
   async findOne(id: string) {
-    return await this.userRepository.findOneBy({ id });
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new NotFoundException(`User #${id} not found`);
+      }
+      return user;
+    } catch (error) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+  }
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const user = this.userRepository.create(createUserDto);
+      await this.userRepository.save(user);
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException('Error creating user');
+    }
   }
 
+
   async update(id: string, updateUserDto: UpdateUserDto) {
-    await this.userRepository.update(id, updateUserDto);
-    return this.userRepository.findOneBy({ id });
+    try {
+      const user = await this.userRepository.preload({
+        id,
+        ...updateUserDto,
+      });
+      if (!user) {
+        throw new NotFoundException(`User #${id} not found`);
+      }
+      return this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException(`Error updating user #${id}`);
+    }
   }
 
   async remove(id: string) {
-    await this.userRepository.delete(id);
-    return `This action removes a #${id} user`;
+    try {
+      const user = await this.userRepository.delete(id);
+      if (user.affected === 0) {
+        throw new NotFoundException(`User ${id} not found`);
+      }
+      return { message: 'Usuario eliminado exitosamente' };
+    } catch (error) {
+      return { message: error.message || 'Internal Server Error' };
+    }
   }
 }

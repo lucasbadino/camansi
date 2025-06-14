@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { InternalServerErrorException } from '@nestjs/common';
+import { UserSeed } from './sedders/users/user.seed';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +14,9 @@ async function bootstrap() {
   } catch (error) {
     throw new InternalServerErrorException(`❌ Error starting the server`);
   }
+  const user_seed = app.get(UserSeed);
+  user_seed.seedUsers();
+  console.log("preloaded users");
 }
 
 bootstrap();
