@@ -1,13 +1,14 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { ClientsModule } from './clients/clients.module';
+import { UsersModule } from './modules/users/users.module';
+import { ClientsModule } from './modules/clients/clients.module';
 import typeOrmConfig from './config/data-sorce';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeedModule } from './sedders/seed.module';
-import { CategoriesModule } from './categories/categories.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { ServicesModule } from './services/services.module';
+import { ServicesModule } from './modules/services/services.module';
+import { ClientsCCModule } from './modules/clients_CC/clientsCC.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ServicesModule } from './services/services.module';
     ClientsModule,
     CategoriesModule,
     ServicesModule,
+    ClientsCCModule,
     SeedModule,
   ],
   controllers: [],

@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -9,14 +13,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findAll() {
     const users = await this.userRepository.find();
     if (!users || users.length === 0) {
       throw new NotFoundException('No users found');
     }
-    return users.map(({ id, nombre, apellido, cel, dni, email }) => ({ id, nombre, apellido, cel, dni, email }));
+    return users.map(({ id, nombre, apellido, cel, dni, email }) => ({
+      id,
+      nombre,
+      apellido,
+      cel,
+      dni,
+      email,
+    }));
   }
 
   async findOne(id: string) {
@@ -39,7 +50,6 @@ export class UsersService {
       throw new InternalServerErrorException('Error creating user');
     }
   }
-
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     try {
