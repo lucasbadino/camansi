@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
 import typeOrmConfig from './config/data-sorce';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeedModule } from './sedders/seed.module';
+import { CategoriesModule } from './categories/categories.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -20,9 +23,17 @@ import { SeedModule } from './sedders/seed.module';
     }),
     UsersModule,
     ClientsModule,
-    SeedModule
+    CategoriesModule,
+    ServicesModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL }); // Middleware aplicado a todas las rutas
+  }
+}

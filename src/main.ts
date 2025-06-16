@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { InternalServerErrorException } from '@nestjs/common';
 import { UserSeed } from './sedders/users/user.seed';
 import { ClientSeed } from './sedders/clients/client.seed';
-
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,10 +17,10 @@ async function bootstrap() {
   }
   const user_seed = app.get(UserSeed);
   user_seed.seedUsers();
-  console.log("preloaded users");
+  console.log('preloaded users');
   const client_seed = app.get(ClientSeed);
   client_seed.seedClients();
-  console.log("preloaded clients");
+  console.log('preloaded clients');
 }
 
 bootstrap();
