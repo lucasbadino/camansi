@@ -10,7 +10,5 @@ export class ClientsCC {
   @Column({ nullable: true })
   fecha_baja: string;
   @Column({ nullable: true })
-  iva: string;
-  @Column({ nullable: true })
   tipo: string;
 }

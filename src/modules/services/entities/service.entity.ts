@@ -8,4 +8,9 @@ export class ServiceEntity {
   name: string;
   @Column()
   description: string;
+  @Column({ nullable: true })
+  price: number;
+
+  /* no frecuente a solicitud del cliente 
+  carpeta del banco, contrato*/
 }

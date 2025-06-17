@@ -22,6 +22,7 @@ export class ClientsController {
   async findAll(@Res() res: Response) {
     try {
       const clients = await this.clientsService.findAll();
+      clients.sort((a, b) => a.nombre.localeCompare(b.nombre));
       return res.status(200).json(clients);
     } catch (error) {
       return res.status(500).json({ message: error.message || 'Internal Server Error' });

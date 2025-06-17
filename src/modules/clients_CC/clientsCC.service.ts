@@ -30,7 +30,7 @@ export class ClientsCCService {
   }
   async createClientCC(clientData: Partial<ClientsCC>) {
     const newClient = this.clientsCCRepository.create(clientData);
-    if (!newClient.iva) {
+    if (!newClient.id) {
       throw new BadRequestException(
         'Name and email are required to create a client',
       );
