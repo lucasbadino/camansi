@@ -32,7 +32,7 @@ export class ClientsCCService {
     const newClient = this.clientsCCRepository.create(clientData);
     if (!newClient.id) {
       throw new BadRequestException(
-        'Name and email are required to create a client',
+        'failed to create a cuenta corriente',
       );
     }
     return await this.clientsCCRepository.save(newClient);
